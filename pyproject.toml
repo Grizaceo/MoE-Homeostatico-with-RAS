@@ -1,0 +1,58 @@
+[project]
+name = "moa-homeostatico-gdl"
+version = "0.1.0"
+description = "Mixture of Agents Homeostático con Geometric Deep Learning"
+requires-python = ">=3.10"
+dependencies = [
+    # Grafos
+    "networkx>=3.0",
+    # Nota: Forman-Ricci implementado manualmente en curvature.py
+    # GraphRicciCurvature removido por incompatibilidad con Python 3.13
+    
+    # Numérico
+    "numpy>=1.24",
+    "scipy>=1.10",
+    
+    # Visualización
+    "matplotlib>=3.7",
+    
+    # Configuración
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    
+    # Logging
+    "structlog>=23.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.1",
+]
+gpu = [
+    # Para Fase 2+ si se necesita GPU
+    "torch>=2.0",
+    "geoopt>=0.5",  # Optimización en variedades (hiperbólico)
+]
+ricci = [
+    # Opcional: para Ollivier-Ricci (requiere Python <=3.12)
+    "GraphRicciCurvature>=0.5.3",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
