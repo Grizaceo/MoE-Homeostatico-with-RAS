@@ -9,7 +9,10 @@ import json
 
 from src.verification.rsi_logger import (
     RSILogger,
-    RSITag,
+    RSILogger,
+    MetricTag,
+    RSITag, # Alias
+    RSIEvent,
     RSIEvent,
     get_logger,
 )
@@ -21,27 +24,27 @@ class TestRSIEvent:
     def test_to_dict(self):
         event = RSIEvent(
             timestamp="2026-02-01T12:00:00",
-            tag="R",
+            tag="CC",
             component="test",
             action="check",
             details={"key": "value"},
             metrics={"latency": 0.5},
         )
         d = event.to_dict()
-        assert d["tag"] == "R"
+        assert d["tag"] == "CC"
         assert d["component"] == "test"
         assert d["details"]["key"] == "value"
     
     def test_to_json(self):
         event = RSIEvent(
             timestamp="2026-02-01T12:00:00",
-            tag="S",
+            tag="LC",
             component="verify",
             action="contract",
         )
         j = event.to_json()
         parsed = json.loads(j)
-        assert parsed["tag"] == "S"
+        assert parsed["tag"] == "LC"
 
 
 class TestRSILogger:
@@ -81,9 +84,9 @@ class TestRSILogger:
         logger.log_imaginario("f")
         
         summary = logger.get_summary()
-        assert summary["R"] == 2
-        assert summary["S"] == 1
-        assert summary["I"] == 3
+        assert summary["CC"] == 2
+        assert summary["LC"] == 1
+        assert summary["PV"] == 3
         assert summary["total"] == 6
     
     def test_file_output(self):
@@ -104,7 +107,7 @@ class TestRSILogger:
             
             # Verificar que es JSON válido
             event1 = json.loads(lines[0])
-            assert event1["tag"] == "R"
+            assert event1["tag"] == "CC"
             assert event1["action"] == "event1"
     
     def test_clear(self):

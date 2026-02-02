@@ -1,0 +1,79 @@
+[
+    {
+        "id": "CAL-001",
+        "prompt": "Calcula 25 * 4.",
+        "difficulty": "L1_TRIVIAL",
+        "expected_answer": "100",
+        "max_efficient_n": 1,
+        "max_efficient_t": 1,
+        "tags": [
+            "arithmetic",
+            "calibration"
+        ]
+    },
+    {
+        "id": "CAL-002",
+        "prompt": "Si A es mayor que B, y B es mayor que C, ¿es A mayor que C?",
+        "difficulty": "L1_TRIVIAL",
+        "expected_answer": "Sí",
+        "max_efficient_n": 1,
+        "max_efficient_t": 1,
+        "tags": [
+            "logic",
+            "trivial",
+            "calibration"
+        ]
+    },
+    {
+        "id": "CAL-003",
+        "prompt": "Tienes 5 litros de agua y una jarra de 3 litros y otra de 4 litros. ¿Cómo mides exactamente 2 litros?",
+        "difficulty": "L2_LOGICAL",
+        "expected_answer": "Llenar 4L, verter en 3L, queda 1L. Vaciar 3L. Poner 1L en 3L. Llenar 4L, verter en 3L hasta llenar. Quedan 2L en la de 4L.",
+        "max_efficient_n": 4,
+        "max_efficient_t": 3,
+        "tags": [
+            "logic",
+            "reasoning",
+            "calibration"
+        ]
+    },
+    {
+        "id": "CAL-004",
+        "prompt": "Un hombre mira la foto de alguien. Su amigo pregunta quién es. El hombre responde: 'No tengo hermanos ni hermanas, pero el padre de este hombre es el hijo de mi padre'. ¿De quién es la foto?",
+        "difficulty": "L2_LOGICAL",
+        "expected_answer": "Su hijo",
+        "max_efficient_n": 4,
+        "max_efficient_t": 2,
+        "tags": [
+            "logic",
+            "riddle",
+            "calibration"
+        ]
+    },
+    {
+        "id": "CAL-005",
+        "prompt": "Escribe un poema sobre la entropía usando el estilo de Jorge Luis Borges.",
+        "difficulty": "L3_CHAOS",
+        "expected_answer": "",
+        "max_efficient_n": 32,
+        "max_efficient_t": 5,
+        "tags": [
+            "creative",
+            "writing",
+            "calibration"
+        ]
+    },
+    {
+        "id": "CAL-006",
+        "prompt": "Inventa un color nuevo y descríbelo sin usar referencias visuales.",
+        "difficulty": "L3_CHAOS",
+        "expected_answer": "",
+        "max_efficient_n": 32,
+        "max_efficient_t": 5,
+        "tags": [
+            "creative",
+            "abstract",
+            "calibration"
+        ]
+    }
+]

@@ -1,5 +1,5 @@
 """
-RAS Controller - El Gerente Homeostático.
+L_kn Manager - El Gerente Homeostático.
 
 Implementa el Sistema de Activación Reticular (RAS) para controlar
 el presupuesto computacional del RSA Engine.
@@ -95,30 +95,35 @@ class OutcomeRecord:
 
 # ============== RAS Controller ==============
 
-class RASController:
+class L_kn_Manager:
     """
-    Controlador homeostático para RSA.
-    
+    Controlador homeostático de recursos.
+
+    Su nombre 'L-kn' (Lacanian Knot) referencia la función topológica
+    de estabilización del sistema (RSI - Real, Simbólico, Imaginario).
+
     Rol: Homeostasis y Economía de la Atención.
     No resuelve el problema, solo asigna presupuesto.
-    
-    Decide dinámicamente los hiperparámetros N, K, T basándose en:
-    - Complejidad estimada del query
-    - Energía disponible (recursos computacionales)
-    - Historial de éxito/fallo en queries similares
-    
-    Implementación actual: Heurística basada en reglas.
-    Futuro: Contextual Bandit con Thompson Sampling.
+
+    Decide dinámicamente:
+        N: Population Size (Amplitud de ideas)
+        K: Aggregation Size (Presión de convergencia)
+        T: Iteration Steps (Profundidad de refinamiento)
+        
+    Basado en:
+        1. Energía disponible (ComputeConstraints - VRAM/Time)
+        2. Complejidad percibida del input
+        3. Historial de éxito/fallo (Feedback Loop)
     """
     
-    # Perfiles de presupuesto predefinidos
+    # Perfiles predefinidos de presupuesto
     BUDGET_PROFILES: dict[BudgetProfile, RSABudget] = {
         BudgetProfile.MINIMAL: RSABudget(
             population_size=4, aggregation_size=2, steps=1,
             profile=BudgetProfile.MINIMAL
         ),
         BudgetProfile.LIGHT: RSABudget(
-            population_size=8, aggregation_size=3, steps=2,
+            population_size=8, aggregation_size=2, steps=2,
             profile=BudgetProfile.LIGHT
         ),
         BudgetProfile.STANDARD: RSABudget(
@@ -126,7 +131,7 @@ class RASController:
             profile=BudgetProfile.STANDARD
         ),
         BudgetProfile.INTENSIVE: RSABudget(
-            population_size=32, aggregation_size=5, steps=4,
+            population_size=32, aggregation_size=8, steps=5,
             profile=BudgetProfile.INTENSIVE
         ),
     }
@@ -398,3 +403,7 @@ class RASController:
         """Resetea el historial y tasas aprendidas."""
         self._outcome_history.clear()
         self._profile_success_rates = {p: 0.8 for p in BudgetProfile}
+
+
+# Alias de compatibilidad hacia atrás
+RASController = L_kn_Manager

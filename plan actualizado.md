@@ -1,54 +1,59 @@
-# ANTIGRAVITY: Arquitectura de Bio-Orquestación Evolutiva (v2.0)
+# PROYECTO: MoE-Homeostatico-L-kn (Arquitectura RSA)
 
-**Fecha:** 1 de Febrero, 2026
-**Estatus:** Fase de Implementación Core
-**Autor:** Grizaceo & Gemini (AI Partner)
+**Plataforma de Desarrollo:** Antigravity AI Agents (Google)
+**Hardware Target:** Local RTX 4060 (8GB VRAM)
+**Modelo Base:** Qwen 2.5 3B Instruct (Int4/Int8)
 
 ---
 
-## 1. Resumen Ejecutivo
-El proyecto Antigravity ha evolucionado de un sistema de enrutamiento estático a una **Arquitectura de Agentes Híbrida**. El objetivo es resolver el trilema de **Coherencia, Creatividad y Costo** en sistemas de IA locales.
+## 1. Visión del Proyecto
+Este proyecto busca implementar capacidades de razonamiento profundo ("System 2 Thinking") en hardware de consumo limitado. A diferencia de los enfoques tradicionales que escalan el tamaño del modelo (Parámetros), nosotros escalamos el tiempo de inferencia y la recursividad.
 
-La solución adoptada separa la toma de decisiones ("Gerencia") de la ejecución del pensamiento ("Motor"), introduciendo mecanismos de **Justicia Algorítmica (Repechaje)** para evitar la convergencia prematura en soluciones mediocres.
+El sistema se inspira en el modelo topológico RSI (Real-Simbólico-Imaginario) para mantener la coherencia, pero se implementa bajo ingeniería de software estricta.
 
-## 2. Definición de Conceptos Clave
+## 2. Componentes Principales
 
-Hemos desambiguado las siglas críticas del proyecto:
+### A. El Gerente: `L_kn` (Lacanian Knot Manager)
+Anteriormente conocido como RAS. Es un agente ligero (o heurística) encargado de la **Homeostasis Metabólica**.
+* **Función:** Evalúa la complejidad del query de entrada y el estado del hardware (`ComputeConstraints`).
+* **Output:** Asigna presupuesto computacional dinámico: Población ($N$), Agregación ($K$) y Pasos ($T$).
+* **Filosofía:** "No gastar energía de maratón para ir a la esquina".
 
-### RAS (Reticular Activating System) - "El Gerente"
-* **Rol:** Homeostasis y Economía de la Atención.
-* **Función:** No resuelve el problema. Analiza el problema para asignar presupuesto.
-* **Decisión:** Determina dinámicamente los hiperparámetros $N$ (Población), $K$ (Agregación) y $T$ (Tiempo) basándose en la energía disponible y la complejidad percibida.
+### B. El Motor: RSA (Recursive Self-Aggregation)
+Implementación adaptada del paper de Venkatraman et al. (2026).
+* **Estrategia "Single-Backbone":** Utilizamos un único modelo cargado en VRAM que rota sus "máscaras" (System Prompts) para simular un comité de expertos.
+* **Innovación - Estratificación:** No usamos muestreo aleatorio. Agrupamos respuestas semánticamente (`sentence-transformers`) para limpiar el ruido del contexto del experto.
+* **Innovación - Repechaje (The Rescue):** Utilizamos Curvatura de Ricci (`GraphRicciCurvature`) para identificar respuestas "Outliers" (semánticamente distantes) pero "Robustas" (topológicamente consistentes) y reinsertarlas en el proceso para fomentar la creatividad.
 
-### RSA (Recursive Self-Aggregation) - "El Motor"
-* **Rol:** Imaginación y Refinamiento.
-* **Función:** Genera poblaciones de ideas paralelas y las refina recursivamente (basado en Venkatraman et al., 2026).
-* **Innovación Antigravity:** A diferencia del paper original, no usa muestreo aleatorio puro.
+---
 
-## 3. La Innovación: Estratificación y Repechaje
+## 3. Glosario de Refactorización (RSI -> Tech)
+Para evitar alucinaciones filosóficas de los LLMs, hemos traducido los conceptos:
 
-Para superar las limitaciones de los modelos pequeños (Quantized Small Models) y evitar "Cámaras de Eco", implementamos una lógica de selección avanzada:
+| Concepto Original (Lacan) | Concepto Técnico (Código) | Descripción |
+| :--- | :--- | :--- |
+| **RSI (Nudo Borromeo)** | **System Topology** | La estructura que mantiene unido el grafo. |
+| **Real (R)** | **ComputeConstraints** | Límites duros: VRAM, Tiempo, Latencia. |
+| **Simbólico (S)** | **LogicalConsistency** | Reglas sintácticas, contratos de API, nudos "locked". |
+| **Imaginario (I)** | **PopulationVariance** | Diversidad de respuestas, entropía de muestreo. |
+| **RAS** | **L_kn (Manager)** | El nodo de control y decisión. |
 
-1.  **Muestreo Estratificado:**
-    Las soluciones no se mezclan al azar. Se agrupan según su afinidad vectorial con el "Experto" que las va a procesar. Esto simula la especialización profesional.
+---
 
-2.  **Mecanismo de Repechaje (The Rescue):**
-    * **Problema:** La estratificación pura mata la creatividad (solo escuchas lo que quieres oír).
-    * **Solución:** Utilizamos **Geometric Deep Learning (Curvatura de Ricci)** para identificar "Outliers Saludables".
-    * **Lógica:** Si un nodo está lejos semánticamente (es raro) pero tiene buena estructura topológica (es coherente), el sistema lo **fuerza** a entrar en la siguiente ronda de agregación.
-    * **Resultado:** Reintroducción controlada de varianza (creatividad) sin perder coherencia.
+## 4. Dependencias Técnicas
+Para reproducir este entorno en la plataforma Antigravity o localmente:
 
-## 4. Stack Tecnológico
+* `vllm` (Preferencia) o `llama-cpp-python`: Backend de inferencia.
+* `sentence-transformers`: Para la vectorización ligera y estratificación.
+* `networkx`: Gestión de grafos.
+* `GraphRicciCurvature`: Cálculo de topología para el Repechaje.
+* `numpy`, `scipy`, `pydantic`.
 
-* **Hardware:** Optimizado para GPU única (RTX 4060).
-* **Modelos Base:** LLMs pequeños cuantizados (Qwen 2.5/3 1.5B - 4B) actuando como "neuronas" o "expertos".
-* **Librerías Críticas:** `GraphRicciCurvature` (Topología), `Sentence-Transformers` (Semántica), `NetworkX` (Grafo).
+---
 
-## 5. Hoja de Ruta Inmediata
+## 5. Apéndice: Escalabilidad y Heterogeneidad
 
-1.  **Fase A (Gemini):** Construcción del "Benchmarking Harness" independiente. El sistema debe ser capaz de reportar si el RAS ahorró recursos en tareas fáciles (Semáforo Verde).
-2.  **Fase B (Claude):** Implementación del `RSASolver` con la lógica de `stratified_sample` y `rescue_outliers`.
-3.  **Fase C (Integración):** Conexión del Bandido (RAS) para controlar los knobs del RSA.
+**Nota sobre la implementación actual vs. ideal:**
+La implementación actual utiliza **"Diversidad Sintética"** (Single-Backbone) debido a las restricciones de memoria de la RTX 4060. Un solo modelo simula diversidad mediante temperatura y prompts.
 
-## 6. Conclusión de Investigación
-Optamos por este modelo de agente porque permite que **modelos locales pequeños superen a modelos gigantes cerrados** mediante el tiempo de cómputo (Inference-time scaling). Al añadir el **Repechaje**, mitigamos el riesgo de alucinación colectiva, anclando la creatividad a la estabilidad topológica del grafo.
+En un entorno de producción con hardware ilimitado (e.g., Clúster de H100s o múltiples 4090s), la arquitectura ideal migraría a **"Diversidad Heterogénea"**. En ese escenario, cada nodo del proceso RSA sería servido por modelos fundacionales distintos (Qwen, Llama, Mistral, DeepSeek) para lograr un **Desacoplamiento de Sesgos (Bias Decoupling)** real. La arquitectura `L_kn` está diseñada para ser agnóstica a este cambio: el "Gerente" puede orquestar tanto un solo modelo esquizofrénico como un clúster de modelos distintos.

@@ -5,7 +5,8 @@ Sistema de Activación Reticular (RAS) para economía de la atención.
 Decide dinámicamente los hiperparámetros del RSA Engine.
 """
 
-from src.ras_core.manager import (
+from src.l_kn_core.manager import (
+    L_kn_Manager,
     RASController,
     QueryContext,
     RSABudget,
@@ -13,6 +14,7 @@ from src.ras_core.manager import (
 )
 
 __all__ = [
+    "L_kn_Manager",
     "RASController",
     "QueryContext",
     "RSABudget",

@@ -21,17 +21,27 @@ from pathlib import Path
 from typing import Any
 
 
-class RSITag(Enum):
+class MetricTag(Enum):
     """
-    Clasificación RSI de eventos según el framework lacaniano-computacional.
+    Clasificación de métricas homeostáticas.
     
-    - REAL: Rupturas duras (inestabilidad numérica, desconexión, errores)
-    - SIMBOLICO: Contratos, verificación, reglas, auditoría
-    - IMAGINARIO: Salida generativa, representaciones, UX
+    - COMPUTE_CONSTRAINTS: Límites de hardware (VRAM, tiempo, errores)
+    - LOGICAL_CONSISTENCY: Reglas, topología, contratos verificados
+    - POPULATION_VARIANCE: Diversidad, entropía, representaciones
+    
+    Nota histórica: Originalmente RSI (Real/Simbólico/Imaginario)
+    del framework lacaniano-computacional.
     """
-    REAL = "R"
-    SIMBOLICO = "S"
-    IMAGINARIO = "I"
+    COMPUTE_CONSTRAINTS = "CC"
+    LOGICAL_CONSISTENCY = "LC"
+    POPULATION_VARIANCE = "PV"
+
+
+# Alias de compatibilidad hacia atrás
+RSITag = MetricTag
+RSITag.REAL = MetricTag.COMPUTE_CONSTRAINTS
+RSITag.SIMBOLICO = MetricTag.LOGICAL_CONSISTENCY
+RSITag.IMAGINARIO = MetricTag.POPULATION_VARIANCE
 
 
 @dataclass
@@ -80,7 +90,7 @@ class RSILogger:
     
     def _create_event(
         self,
-        tag: RSITag,
+        tag: MetricTag,
         action: str,
         details: dict[str, Any] | None = None,
         metrics: dict[str, float] | None = None,
@@ -110,58 +120,51 @@ class RSILogger:
             with open(self.output_path, "a", encoding="utf-8") as f:
                 f.write(event.to_json() + "\n")
     
-    def log_real(
+    def log_compute_constraints(
         self,
         action: str,
         details: dict[str, Any] | None = None,
         metrics: dict[str, float] | None = None,
     ) -> None:
         """
-        Log de evento REAL: rupturas, errores, inestabilidad.
-        
-        Ejemplos:
-        - NaN detectado en cálculo
-        - Grafo desconectado
-        - Timeout excedido
+        Log de COMPUTE_CONSTRAINTS: límites hardware, errores, timeouts.
+        (Antes REAL)
         """
-        event = self._create_event(RSITag.REAL, action, details, metrics)
+        event = self._create_event(MetricTag.COMPUTE_CONSTRAINTS, action, details, metrics)
         self._emit(event)
     
-    def log_simbolico(
+    def log_logical_consistency(
         self,
         action: str,
         details: dict[str, Any] | None = None,
         metrics: dict[str, float] | None = None,
     ) -> None:
         """
-        Log de evento SIMBÓLICO: reglas, contratos, verificación.
-        
-        Ejemplos:
-        - Umbral de Ricci aplicado
-        - Contrato de conectividad verificado
-        - Gate de aceptación evaluado
+        Log de LOGICAL_CONSISTENCY: reglas, contratos, verificación.
+        (Antes SIMBÓLICO)
         """
-        event = self._create_event(RSITag.SIMBOLICO, action, details, metrics)
+        event = self._create_event(MetricTag.LOGICAL_CONSISTENCY, action, details, metrics)
         self._emit(event)
     
-    def log_imaginario(
+    def log_population_variance(
         self,
         action: str,
         details: dict[str, Any] | None = None,
         metrics: dict[str, float] | None = None,
     ) -> None:
         """
-        Log de evento IMAGINARIO: representaciones, outputs, UX.
-        
-        Ejemplos:
-        - Embedding generado
-        - Visualización creada
-        - Respuesta formateada
+        Log de POPULATION_VARIANCE: diversidad, entropía, representaciones.
+        (Antes IMAGINARIO)
         """
-        event = self._create_event(RSITag.IMAGINARIO, action, details, metrics)
+        event = self._create_event(MetricTag.POPULATION_VARIANCE, action, details, metrics)
         self._emit(event)
+
+    # Alias de compatibilidad
+    log_real = log_compute_constraints
+    log_simbolico = log_logical_consistency
+    log_imaginario = log_population_variance
     
-    def get_events(self, tag: RSITag | None = None) -> list[RSIEvent]:
+    def get_events(self, tag: MetricTag | None = None) -> list[RSIEvent]:
         """Obtiene eventos, opcionalmente filtrados por tag."""
         if tag is None:
             return self._events.copy()
@@ -170,9 +173,9 @@ class RSILogger:
     def get_summary(self) -> dict[str, int]:
         """Resumen de conteo de eventos por tag."""
         return {
-            "R": len(self.get_events(RSITag.REAL)),
-            "S": len(self.get_events(RSITag.SIMBOLICO)),
-            "I": len(self.get_events(RSITag.IMAGINARIO)),
+            "CC": len(self.get_events(MetricTag.COMPUTE_CONSTRAINTS)),
+            "LC": len(self.get_events(MetricTag.LOGICAL_CONSISTENCY)),
+            "PV": len(self.get_events(MetricTag.POPULATION_VARIANCE)),
             "total": len(self._events),
         }
     

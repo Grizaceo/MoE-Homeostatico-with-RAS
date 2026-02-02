@@ -15,12 +15,18 @@ VARIABLES AJUSTABLES (marcadas con # PARAM):
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Protocol
-from abc import ABC, abstractmethod
+from typing import Protocol, Literal
 import numpy as np
 
-from src.rsa_engine.population import PopulationManager, Candidate, EmbeddingProvider
+from src.rsa_engine.population import PopulationManager, Candidate
+from src.rsa_engine.embeddings import EmbeddingProvider, MockEmbeddingProvider
 from src.rsa_engine.selection import stratified_sample, RepechageBuffer
+from src.core.backend import (
+    SingleModelGenerator,
+    MockSingleModelGenerator,
+    EXPERT_ROLES,
+    LLMBackend,
+)
 from src.verification.rsi_logger import RSILogger
 
 
@@ -52,27 +58,9 @@ class LLMAdapter(Protocol):
         ...
 
 
-class MockLLMAdapter:
-    """
-    Adaptador mock para testing sin LLM real.
-    
-    Genera respuestas determinísticas basadas en el input.
-    """
-    
-    def __init__(self, seed: int | None = None):
-        self._rng = np.random.default_rng(seed)
-        self._call_count = 0
-    
-    def generate(self, prompt: str, **kwargs) -> str:
-        self._call_count += 1
-        # Respuesta mock basada en hash
-        response_id = hash(prompt + str(self._call_count)) % 10000
-        return f"[Mock Response #{response_id}] Generated for: {prompt[:50]}..."
-    
-    def aggregate(self, query: str, responses: list[str], **kwargs) -> str:
-        self._call_count += 1
-        n_responses = len(responses)
-        return f"[Mock Aggregation] Synthesized {n_responses} responses for query: {query[:30]}..."
+# MockLLMAdapter movido a src/core/backend.py como MockSingleModelGenerator
+# Mantener alias para compatibilidad
+MockLLMAdapter = MockSingleModelGenerator
 
 
 # ============== Configuration ==============
@@ -261,17 +249,37 @@ class RSASolver:
         query: str,
         population: PopulationManager,
     ) -> None:
-        """Genera la población inicial de N candidatos."""
+        """
+        Genera la población inicial de N candidatos.
+        
+        Simula "expertos" rotando system_role dinámicamente
+        para obtener diversidad con un solo modelo.
+        """
+        # Roles disponibles para rotación
+        available_roles = list(EXPERT_ROLES.keys())
+        n_roles = len(available_roles)
+        
         for i in range(self.config.population_size):
-            # Generar respuesta
+            # Rotar role para diversidad
+            role_idx = i % n_roles
+            system_role = available_roles[role_idx]
+            
+            # Generar respuesta con rol específico y alta temperatura
             prompt = self._format_generation_prompt(query, i)
-            response = self.llm.generate(prompt)
+            response = self.llm.generate(
+                prompt=prompt,
+                system_role=system_role,
+                temperature=0.8,  # Alta para diversidad en población inicial
+            )
             
             # Añadir a población
             cid = population.add_candidate(
                 response=response,
                 round_created=0,
-                metadata={"generation_index": i},
+                metadata={
+                    "generation_index": i,
+                    "expert_role": system_role,
+                },
             )
             
             # Score inicial (placeholder - podría venir del LLM)

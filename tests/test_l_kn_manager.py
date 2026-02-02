@@ -5,8 +5,8 @@ Tests para RAS Controller.
 import pytest
 import numpy as np
 
-from src.ras_core.manager import (
-    RASController,
+from src.l_kn_core.manager import (
+    L_kn_Manager,
     QueryContext,
     RSABudget,
     BudgetProfile,
@@ -81,14 +81,14 @@ class TestBudgetProfiles:
     
     def test_all_profiles_exist(self):
         """Todos los perfiles están definidos."""
-        controller = RASController()
+        controller = L_kn_Manager()
         
         for profile in BudgetProfile:
             assert profile in controller.BUDGET_PROFILES
     
     def test_profiles_have_valid_values(self):
         """Perfiles tienen valores válidos."""
-        controller = RASController()
+        controller = L_kn_Manager()
         
         for profile, budget in controller.BUDGET_PROFILES.items():
             assert budget.population_size > 0
@@ -98,7 +98,7 @@ class TestBudgetProfiles:
     
     def test_profiles_ordered_by_cost(self):
         """Perfiles ordenados por costo."""
-        controller = RASController()
+        controller = L_kn_Manager()
         
         costs = [
             controller.BUDGET_PROFILES[BudgetProfile.MINIMAL].total_cost,
@@ -110,19 +110,19 @@ class TestBudgetProfiles:
         assert costs == sorted(costs)
 
 
-class TestRASController:
-    """Tests para RASController."""
+class Test_L_kn_Manager:
+    """Tests para L_kn_Manager."""
     
     def test_controller_creation(self):
-        """RASController se crea."""
-        controller = RASController(seed=42)
+        """L_kn_Manager se crea."""
+        controller = L_kn_Manager(seed=42)
         
         assert controller.default_profile == BudgetProfile.STANDARD
         assert controller.enable_adaptation is True
     
     def test_decide_budget_simple_query(self):
         """Query simple recibe budget bajo."""
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         context = QueryContext(
             query="Hi",  # Muy corto
@@ -136,7 +136,7 @@ class TestRASController:
     
     def test_decide_budget_complex_query(self):
         """Query complejo recibe budget alto."""
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         context = QueryContext(
             query="Compare and analyze the pros and cons of different approaches to quantum computing, including superconducting qubits, trapped ions, and photonic systems. Explain why each has trade-offs.",
@@ -149,7 +149,7 @@ class TestRASController:
     
     def test_complexity_estimation(self):
         """Estimación de complejidad funciona."""
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         # Query simple
         simple_ctx = QueryContext(query="Hello")
@@ -166,7 +166,7 @@ class TestRASController:
     
     def test_max_cost_constraint(self):
         """Límite de costo se respeta."""
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         context = QueryContext(
             query="Very complex query requiring deep analysis",
@@ -180,7 +180,7 @@ class TestRASController:
     
     def test_update_from_outcome(self):
         """Actualización desde resultado funciona."""
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         context = QueryContext(query="Test query")
         budget = RSABudget(
@@ -204,7 +204,7 @@ class TestRASController:
     
     def test_learning_adaptation(self):
         """Adaptación de tasas de éxito."""
-        controller = RASController(seed=42, adaptation_rate=0.5)
+        controller = L_kn_Manager(seed=42, adaptation_rate=0.5)
         
         context = QueryContext(query="Test")
         budget = RSABudget(
@@ -231,7 +231,7 @@ class TestRASController:
     
     def test_reset_learning(self):
         """Reset de aprendizaje funciona."""
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         # Registrar algunos outcomes
         context = QueryContext(query="Test")
@@ -248,7 +248,7 @@ class TestRASController:
     
     def test_get_stats(self):
         """Estadísticas retornan correctamente."""
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         stats = controller.get_stats()
         
@@ -264,7 +264,7 @@ class TestIntegrationRASRSA:
         """RAS decide parámetros que RSA puede usar."""
         from src.rsa_engine.solver import RSASolver, RSAConfig
         
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         context = QueryContext(
             query="Explain the theory of relativity",
@@ -291,7 +291,7 @@ class TestIntegrationRASRSA:
         """Loop de feedback RAS -> RSA -> RAS."""
         from src.rsa_engine.solver import RSASolver, RSAConfig
         
-        controller = RASController(seed=42)
+        controller = L_kn_Manager(seed=42)
         
         for i in range(3):
             context = QueryContext(query=f"Query number {i}")
